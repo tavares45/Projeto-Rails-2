@@ -38,7 +38,7 @@ class MoviesController < ApplicationController
     csv.each do |row|
       movie = Movie.new(
         title: row['title'],
-        genre: row['type'] == 'Movie' ? 'Movie' : 'TV Show',
+        genre: row['type'],
         year: row['release_year'],
         country: row['country'],
         published_at: row['date_added'],
