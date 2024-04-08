@@ -1,5 +1,9 @@
 class MoviesController < ApplicationController
+  
   require 'csv'
+  require 'byebug'
+  require 'securerandom'
+  require 'uuidtools'
 
   skip_before_action :verify_authenticity_token, only: [:import_csv]
 
@@ -9,34 +13,37 @@ class MoviesController < ApplicationController
     @movies = @movies.where(year: params[:year]) if params[:year].present?
     @movies = @movies.where(genre: params[:genre]) if params[:genre].present?
     @movies = @movies.where(country: params[:country]) if params[:country].present?
-   
+    #@movies = @movies.group_by(&:title).values.map(&:first)
+
     response_data = []
 
     @movies.each do |movie|
       response_data << {
+        id: movie.id,
         title: movie.title,
         genre: movie.genre,
-        year: movie.year.to_s,
+        year: movie.year,
         country: movie.country,
-        published_at: movie.published_at,
+        published_at: movie.published_at.strftime('%Y-%d-%m'),
         description: movie.description
       }
     end
 
-    render json: response_data.uniq
+    render json: response_data
   end
 
   def show
   end
 
   def import_csv
-    csv_text = params[:'movies.csv'].tempfile.read
+    csv_text = params['file'].tempfile.read
     csv = CSV.parse(csv_text, headers: true, encoding: 'UTF-8')
   
     imported_data = []
   
     csv.each do |row|
       movie = Movie.new(
+        id: SecureRandom.uuid,
         title: row['title'],
         genre: row['type'],
         year: row['release_year'],
@@ -47,6 +54,7 @@ class MoviesController < ApplicationController
 
       if movie.save
         imported_data << {  
+          id: movie.id,
           title: movie.title,
           genre: movie.genre,
           year: movie.year, 
@@ -56,10 +64,11 @@ class MoviesController < ApplicationController
         }
       end
     end
-  
+
     render json: imported_data
   end
-end
+end 
+  
 
 
 
