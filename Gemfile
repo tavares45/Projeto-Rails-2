@@ -66,6 +66,6 @@ group :test do
   gem "selenium-webdriver"
   gem 'csv'
   gem 'byebug'
-  gem 'securerandom'
-  gem 'uuid'
+  gem 'uuid', '~> 2.3', require: 'uuid'
+  gem 'uuidtools', '~> 2.2'
 end
