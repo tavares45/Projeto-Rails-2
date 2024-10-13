@@ -1,24 +1,6 @@
-# README
+API de Catálogo de Filmes
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+API para gerenciar um catálogo de filmes, com dois endpoints principais:
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Importar filmes: Lê um arquivo CSV e cria registros no banco, evitando duplicidade no DB.
+Listar filmes: Retorna todos os filmes cadastrados em formato JSON.
